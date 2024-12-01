@@ -1,0 +1,65 @@
+# Source: https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-docker-images
+
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  MASTER_TAGS: latest
+  DEVELOP_TAGS: preview
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      # Repo Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # Registry Login
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Tags
+      - name: Set Docker tags based on branch
+        id: set-tags
+        # Get the short commit hash and the branch tags and set them as environment variables
+        run: |
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            echo "tags=${{ env.MASTER_TAGS }}" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+            echo "tags=${{ env.DEVELOP_TAGS }}" >> $GITHUB_ENV
+          fi
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha
+            ${{ env.tags }}
+      
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
