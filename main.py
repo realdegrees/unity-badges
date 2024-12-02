@@ -32,7 +32,7 @@ def index():
     return "Guide Placeholder" # TODO: Add simple guide to the API
 
 @app.route('/<badge>/<owner>/<repo>', methods=['GET'])
-@cache.cached(timeout=300, query_string=True)
+@cache.cached(timeout=60 * 3, query_string=True)
 def home(badge, owner, repo):
     # Create an object to store the result in memory
     output = BytesIO()
@@ -51,8 +51,8 @@ def home(badge, owner, repo):
     response = make_response(
         send_file(output, mimetype=mimetype))
     response.headers['Content-Type'] = mimetype
-    response.headers['Cache-Control'] = f'public, max-age={60 * 60 * 24}'
-    response.headers['Expires'] = f'{60 * 60 * 24}'
+    response.headers['Cache-Control'] = f'public, max-age={60 * 3}'
+    response.headers['Expires'] = f'{60 * 3}'
     
     return response
 
