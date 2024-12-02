@@ -1,12 +1,23 @@
 ## Unity Badges
 
 A REST API that returns an image containing a badge that can be used on GitHub to display specific stats about a Unity project.
+I made this as a side project to improve the collaborative aspect in a [Unity project repo for a game engineering course at my Uni](https://github.com/realdegrees/ur-game-engineering).
 
-A live version is available at [https://badge.realdegrees.dev/](https://badge.realdegrees.dev/)
+Here is a live example of the badge using that repo:
+<hr> 
+
+![](https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering)  
+Uses `![](https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering)`  
+
+<hr> 
 
 ### Endpoints
 
 #### GET `/<badge>/<owner>/<repo>`
-##### Params (Optional)
+##### Displays the specified badge for the repo
 
-URL Syntax: `http(s)://<domain>.<tld>/<caption>?type=<type>&font=<font>&font_size=<font_size>`
+
+### Badges
+ - `scene-change`
+ Shows an overview of all `.unity` files that have changes compared to develop together with their branch
+ If a scene is being modified in multiple branches that scene is display with a warning
