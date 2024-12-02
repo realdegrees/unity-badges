@@ -6,8 +6,8 @@ I made this as a side project to improve the collaborative aspect in a [Unity pr
 Here is a live example of the badge using that repo:
 <hr> 
 
-![](https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering)  
-Uses `![](https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering)`  
+![](https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering?label=Example%20Label)  
+Uses `![](https://unity-badges.realdegrees.dev/scene-changes/realdegrees/ur-game-engineering?label=Example%20Label)`  
 
 <hr> 
 
