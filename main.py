@@ -27,12 +27,12 @@ cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 badges = load_badges()
 
 @app.route('/')
-@cache.cached(timeout=600, query_string=True)
+@cache.cached(timeout=1000, query_string=True)
 def index():
     return "Guide Placeholder" # TODO: Add simple guide to the API
 
 @app.route('/<badge>/<owner>/<repo>', methods=['GET'])
-@cache.cached(timeout=600, query_string=True)
+@cache.cached(timeout=300, query_string=True)
 def home(badge, owner, repo):
     # Create an object to store the result in memory
     output = BytesIO()
