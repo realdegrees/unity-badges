@@ -5,18 +5,22 @@ from typing import List
 from util.table import Table, Cell
 from util.text import get_text_dimensions
 
-font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), 14)
+font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), 24)
 padding = 2
 
 
-def draw_badge(label: str, content: List[List[Cell]], header_color, footer_color, body_color, footer_height=5, max_col_width=100, padding=5) -> Image:
+def draw_badge(label: str, content: List[List[Cell]], header_color, footer_color, body_color, footer_height=5, max_col_width=1000, padding=5, corner_radius=8) -> Image:
+    label = label if len(label) < 200 else "Label too long (200)"
+    
     content = content if content and len(content) > 0 else [
-        [Cell("No scene changes in feature branches")]]
+        [Cell("|" + len(label) * " " + "None" + len(label) * " " + "|")]]
+    
     table = Table(content, font, max_col_width, padding)
 
     badge_width = table.get_width()
 
-    header_content_width, header_content_height, label = get_text_dimensions(font, badge_width, label)
+    header_content_width, header_content_height, label = get_text_dimensions(
+        font, badge_width, label)
     header_height = header_content_height + padding
     badge_height = table.get_height() + footer_height + header_height
 
@@ -75,7 +79,8 @@ def draw_badge(label: str, content: List[List[Cell]], header_color, footer_color
                       stroke_fill="#434343", stroke_width=stroke_width)
             y_offset += line_height
 
-    draw_text(draw, label, header_content_height, header_content_width, header_height, (badge_width - header_content_width) // 2, (header_height - header_content_height) // 2, 1)
+    draw_text(draw, label, header_content_height, header_content_width, header_height,
+              (badge_width - header_content_width) // 2, (header_height - header_content_height) // 2, 1)
 
     def draw_cell_content(image: Image.Image, draw: ImageDraw.ImageDraw, cell: Cell) -> None:
         [x_offset, y_offset] = cell.table.get_cell_offset(cell)
@@ -114,8 +119,21 @@ def draw_badge(label: str, content: List[List[Cell]], header_color, footer_color
         draw.line((0, y_offset, badge_width, y_offset),
                   fill=(0, 0, 0, 0), width=2)
 
-    table.for_each_row(lambda y_offset, row: draw_seperator(y_offset + header_height, row))
+    table.for_each_row(lambda y_offset, row: draw_seperator(
+        y_offset + header_height, row))
     table.for_each_cell(draw_cell)
+
+    # Round the corners of the image
+    def round_corners(image: Image.Image, radius: int) -> Image.Image:
+        mask = Image.new("L", image.size, 0)
+        draw = ImageDraw.Draw(mask)
+        draw.rounded_rectangle([(0, 0), image.size], radius=radius, fill=255)
+        rounded_image = Image.new("RGBA", image.size)
+        rounded_image.paste(image, (0, 0), mask)
+        return rounded_image
+
+    if corner_radius > 0:
+        image = round_corners(image, corner_radius)
 
     # Save the image
     return image

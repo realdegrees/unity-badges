@@ -14,7 +14,6 @@ class SceneChangesBadge(Badge):
     def create(self, owner: str, repo: str, args: dict) -> Image:
         label = args.get("label", self.label)
         header_color = args.get("color", "#434343")
-        # TODO: Implement logic to calculate the scene changes and convert them to Cells
 
         changes = find_changes(owner, repo, ".unity")
         content = [[Cell("Branch"), Cell("Scene"), Cell("Status")]]
@@ -28,9 +27,9 @@ class SceneChangesBadge(Badge):
 
         for change in changes:
             if filename_counts[change["filename"]] > 1:
-                change["status"] = "conflict"
+                change["status"] = "❌"
             else:
-                change["status"] = "wip"
+                change["status"] = "✅"
         for change in changes:
             content.append([
                 Cell(change["branch"]),
@@ -40,4 +39,4 @@ class SceneChangesBadge(Badge):
 
         footer_color = "green" if not any(
             change["status"] == "conflict" for change in changes) else "orange"
-        return draw_badge(label, content if len(content) > 1 else [], max_col_width=400, padding=15, footer_color=footer_color, header_color=header_color, body_color="#555555")
+        return draw_badge(label, content if len(content) > 1 else [], max_col_width=800, padding=15, footer_color=footer_color, header_color=header_color, body_color="#555555")
