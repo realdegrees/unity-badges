@@ -39,4 +39,4 @@ class SceneChangesBadge(Badge):
 
         footer_color = "green" if not any(
             change["status"] == "conflict" for change in changes) else "orange"
-        return draw_badge(self.label, content if len(content) > 1 else [], max_col_width=1200, padding=15, footer_color=footer_color, header_color=header_color, body_color="#555555")
+        return draw_badge("", content if len(content) > 1 else [], max_col_width=1200, padding=15, footer_color=footer_color, header_color=header_color, body_color="#555555")
