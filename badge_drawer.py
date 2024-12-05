@@ -13,7 +13,7 @@ def draw_badge(label: str, content: List[List[Cell]], header_color, footer_color
     label = label if len(label) < 200 else "Label too long (200)"
     
     content = content if content and len(content) > 0 else [
-        [Cell("|" + len(label) * " " + "None" + len(label) * " " + "|")]]
+        [Cell("None")]]
     
     table = Table(content, font, max_col_width, padding)
 
