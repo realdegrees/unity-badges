@@ -5,7 +5,7 @@ from typing import List
 from util.table import Table, Cell
 from util.text import get_text_dimensions
 
-font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), 24)
+font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), 16)
 padding = 2
 
 

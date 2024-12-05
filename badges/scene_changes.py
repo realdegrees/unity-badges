@@ -2,8 +2,6 @@ from badge import Badge
 from io import BytesIO
 from PIL import Image
 from badge_drawer import draw_badge, Cell
-import os
-from dotenv import load_dotenv
 from util.github import find_changes
 
 
@@ -37,6 +35,9 @@ class SceneChangesBadge(Badge):
                 Cell(change["status"]),
             ])
 
+        if not changes:
+            content.append([Cell("No Scene Changes")])
+            
         footer_color = "green" if not any(
             change["status"] == "conflict" for change in changes) else "orange"
         return draw_badge("", content if len(content) > 1 else [], max_col_width=1200, padding=15, footer_color=footer_color, header_color=header_color, body_color="#555555")
