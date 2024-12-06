@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  unity-badges:
+    image: ghcr.io/realdegrees/unity-badges:latest
+    container_name: unity-badges
+    restart: always
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      CACHE_REDIS_HOST: ${CACHE_REDIS_HOST}  # Use the service name as the hostname
+      CACHE_REDIS_PORT: ${CACHE_REDIS_PORT}
+      CACHE_REDIS_DB: ${CACHE_REDIS_DB}
+    depends_on:
+      - redis
+    port:
+      - "5000:5000"
+  redis:
+    image: redis:latest
+    container_name: unity-badges-redis
+    restart: always
+networks:
+  web:
+    external: true

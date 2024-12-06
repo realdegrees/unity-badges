@@ -7,12 +7,7 @@ from flask_limiter.util import get_remote_address
 from flask_caching import Cache
 from util.badge_loader import load_badges 
 from util.html_to_png import html_to_png
-# from pyppeteer.chromium_downloader import download_chromium
 
-# Setup chromium for pyppeteer
-# download_chromium()
-
-print("debug")
 # Load environment variables
 load_dotenv()
 env = os.getenv('ENV', 'development')
@@ -27,7 +22,24 @@ limiter = Limiter(
                     "10 per minute", "4 per second"],
     storage_uri="memory://",
 )
-cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+
+try:
+    app.config['CACHE_TYPE'] = 'RedisCache'
+    app.config['CACHE_REDIS_HOST'] = os.getenv('CACHE_REDIS_HOST', 'localhost')
+    app.config['CACHE_REDIS_PORT'] = int(os.getenv('CACHE_REDIS_PORT', 6379))
+    app.config['CACHE_REDIS_DB'] = int(os.getenv('CACHE_REDIS_DB', 0))
+    cache = Cache()
+    cache.init_app(app)
+    # Test redis connection
+    cache.set('test_key', 'test_value')
+    if cache.get('test_key') != 'test_value':
+        raise Exception("Redis connection test failed.")
+    
+except Exception as e:
+    print(f"Redis connection failed: {e}, falling back to memory cache")
+    app.config['CACHE_TYPE'] = 'SimpleCache'
+    cache = Cache()
+    cache.init_app(app)
 
 # Load badges
 badges = load_badges()
