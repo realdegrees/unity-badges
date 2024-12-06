@@ -15,8 +15,10 @@ class SceneChangesBadge(Badge):
 
     def create(self, owner: str, repo: str, args: dict) -> str:
         label = args.get("label", self.label)[:50]
+        base_branch = args.get('base', 'develop')
 
-        changes = find_changes(owner, repo, ".unity")
+
+        changes = find_changes(owner, repo, ".unity", base_branch)
 
         # Iterates through all changes and finds conflicts between branches, conflicts are stored as a property of changes
         for branch, branch_data in changes.items():
