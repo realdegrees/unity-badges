@@ -14,10 +14,12 @@ EXCLUDE_BRANCHES = {"main", "develop"}
 HEADERS = {"Authorization": f"Bearer {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 
-def fetch_branches(base_url):
+def fetch_branches(base_url) -> List[str]:
     url = f"{base_url}/branches"
     response = requests.get(url, headers=HEADERS)
     response.raise_for_status()
+    if response.status_code != 200:
+        return []
     branches = response.json()
 
     return [branch["name"] for branch in branches if branch["name"] not in EXCLUDE_BRANCHES]
@@ -26,7 +28,8 @@ def fetch_branches(base_url):
 def fetch_branch_changes_against(base_url: str, head_branch: str, base_branch: str = "develop", file_extension: str = ".unity") -> List[str]:
     url = f"{base_url}/compare/{base_branch}...{head_branch}"
     response = requests.get(url, headers=HEADERS)
-    response.raise_for_status()
+    if response.status_code != 200:
+        return []
     diff_data = response.json()
 
     # Filter files with the specified extension

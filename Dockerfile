@@ -1,7 +1,11 @@
 # Use a lightweight base image
-FROM python:3.13-alpine
+FROM ubuntu:22.04
 
-RUN apk add --no-cache bash ffmpeg
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    bash \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
@@ -14,6 +18,10 @@ COPY requirements.txt .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Install chromium for playwright
+RUN playwright install-deps
+RUN playwright install chromium
 
 # Copy the rest of the application code
 COPY . .

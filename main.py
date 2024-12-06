@@ -7,7 +7,12 @@ from flask_limiter.util import get_remote_address
 from flask_caching import Cache
 from util.badge_loader import load_badges 
 from util.html_to_png import html_to_png
+# from pyppeteer.chromium_downloader import download_chromium
 
+# Setup chromium for pyppeteer
+# download_chromium()
+
+print("debug")
 # Load environment variables
 load_dotenv()
 env = os.getenv('ENV', 'development')
