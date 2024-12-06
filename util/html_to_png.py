@@ -13,6 +13,7 @@ async def html_to_png(html_content) -> io.BytesIO:
             # executable_path='/usr/bin/chromium-browser',
         )
         page = await browser.new_page()
+        await page.set_viewport_size({"width": 1200, "height": 3000})
         await page.set_content(html_content)
         screenshot = await page.screenshot(omit_background=True)
         await browser.close()
