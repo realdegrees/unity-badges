@@ -3,6 +3,9 @@
 A REST API that returns an image containing a badge that can be used on GitHub to display specific stats about a Unity project.
 I made this as a side project to improve the collaborative aspect in a [Unity project repo for a game engineering course at my Uni](https://github.com/realdegrees/ur-game-engineering).
 
+It's a Flask API that uses the route and arguments to create a badge as a png file that can be embedded into e.g. READMEs in github. The badges are created by taking the data that was queried using the repo defined in the route and applying it to a jinja template.
+The resulting html is rendered using a headless browser by playwright. The page is the screenshotted and cropped to return the final badge in the request.
+
 Here is a live example of the badge using that repo:
 <hr> 
 
@@ -11,11 +14,13 @@ Here is a live example of the badge using that repo:
 
 ### Endpoints
 
-#### GET `/<badge>/<owner>/<repo>`
-##### Displays the specified badge for the repo
+| Type | Route                        | Generic Url Args (Can be used for all badges)  |
+|------|------------------------------|-------|
+| GET  | `/<badge>/<owner>/<repo>`    | label |
+
 
 
 ### Badges
- - `scene-change`
- Shows an overview of all `.unity` files that have changes compared to develop together with their branch
- If a scene is being modified in multiple branches that scene is displayed with a warning.
+| Badge | Description | Custom Url Args |
+|-|-|-|
+| scene-change | Checks the diffs between feature branches<br>and a base branch (base argument (Default: develop)) for .unity files.<br>The modified Unity scene files are listed in the badge.<br>Possible conflicts between the scenes are highlighted. | base
