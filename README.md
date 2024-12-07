@@ -5,7 +5,7 @@ A REST API that returns an image containing a badge that can be used on GitHub t
 I made this as a side project to improve the collaborative aspect in a [Unity project repo for a game engineering course at my Uni](https://github.com/realdegrees/ur-game-engineering).
 
 It's a Flask API that uses the route and arguments to create a badge as a png file that can be embedded into e.g. READMEs in github. The badges are created by taking the data that was queried using the repo defined in the route and applying it to a [**Jinja**](https://jinja.palletsprojects.com/en/stable/) template.
-The resulting html is rendered using a headless browser by [**Playwright**](https://github.com/microsoft/playwright). The page is the screenshotted and cropped to return the final badge in the request.
+The resulting html is rendered using a headless browser by [**Playwright**](https://github.com/microsoft/playwright). A cropped screenshot of the page shows the final badge which is then returned in the response.
 
 Basic Caching using Flask-Caching and redis and a rate limiter using Flask-Limiter are included.
 If unable to connect to redis the app defaults to in-memory caching.
