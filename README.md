@@ -37,4 +37,4 @@ While playwright is part of the [requirements](./requirements.txt) it needs to i
 ## Badges
 | Badge | Description | Custom Url Args |
 |-|-|-|
-| scene-change | Checks the diffs between feature branches<br>and a base branch (base argument (Default: develop)) for .unity files.<br>The modified Unity scene files are listed in the badge.<br>Possible conflicts between the scenes are highlighted. | base
+| scene-changes | Checks the diffs between feature branches<br>and a base branch (base argument (Default: develop)) for .unity files.<br>The modified Unity scene files are listed in the badge.<br>Possible conflicts between the scenes are highlighted. | base
